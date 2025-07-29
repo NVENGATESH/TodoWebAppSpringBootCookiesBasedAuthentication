@@ -31,7 +31,7 @@ public class JwtUtils {
     @Value("${spring.app.jwtCookieName}")
     private String jwtCookie;
 
-    private boolean isProd = false; // set this according to your environment
+    private boolean isProd = true; // set this according to your environment
 
     public String getJwtFromCookies(HttpServletRequest request) {
         Cookie cookie = WebUtils.getCookie(request, jwtCookie);
