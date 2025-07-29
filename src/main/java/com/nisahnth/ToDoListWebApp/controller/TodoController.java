@@ -23,7 +23,8 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.List;
 
-@CrossOrigin("https://todo-react-app-psi-gold.vercel.app")
+@CrossOrigin(origins = "https://todo-react-app-git-main-nvengateshs-projects.vercel.app", allowCredentials = "true")
+
 @RestController
 @RequestMapping("/api")
 public class TodoController {

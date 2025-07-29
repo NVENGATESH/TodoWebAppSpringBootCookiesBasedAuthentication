@@ -5,6 +5,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
 
+import javax.crypto.SecretKey;
 import java.security.Key;
 import java.util.Date;
 
@@ -31,58 +33,85 @@ public class JwtUtils {
     @Value("${spring.app.jwtCookieName}")
     private String jwtCookie;
 
-    private boolean isProd = true;
-
     public String getJwtFromCookies(HttpServletRequest request) {
         Cookie cookie = WebUtils.getCookie(request, jwtCookie);
-        return (cookie != null) ? cookie.getValue() : null;
+        if (cookie != null) {
+            return cookie.getValue();
+        } else {
+            return null;
+        }
     }
 
     public ResponseCookie generateJwtCookie(UserDetailsImpl userPrincipal) {
         String jwt = generateTokenFromUsername(userPrincipal.getUsername());
-        return ResponseCookie.from(jwtCookie, jwt)
+        ResponseCookie cookie = ResponseCookie.from(jwtCookie, jwt)
                 .path("/")
                 .maxAge(24 * 60 * 60)
                 .httpOnly(true)
-                .secure(isProd)
-                .sameSite(isProd ? "None" : "Lax")
+                .secure(true)
+                .sameSite("None")  // ✅ Required for cross-site cookie
                 .build();
+        return cookie;
     }
 
+
+//    ResponseCookie cookie = ResponseCookie.from("AUTH-TOKEN", token)
+//            .httpOnly(true)
+//            .secure(false) // change to true in HTTPS
+//            .path("/")
+//            .maxAge(24 * 60 * 60) // 1 day
+//            .sameSite("Strict")
+//            .build();
+
     public ResponseCookie getCleanJwtCookie() {
-        return ResponseCookie.from(jwtCookie, "")
+        ResponseCookie cookie = ResponseCookie.from(jwtCookie, null)
                 .path("/")
-                .maxAge(0)
+                .maxAge(0) // delete cookie
                 .httpOnly(true)
-                .secure(isProd)
-                .sameSite(isProd ? "None" : "Lax")
+                .secure(true)
+                .sameSite("None")  // ✅ Important
                 .build();
+        return cookie;
     }
+
+//    @PostMapping("/logout")
+//    public ResponseEntity<?> logout(HttpServletResponse response) {
+//        ResponseCookie cookie = ResponseCookie.from("AUTH-TOKEN", "")
+//                .httpOnly(true)
+//                .secure(false)
+//                .path("/")
+//                .maxAge(0) // expire immediately
+//                .build();
+//
+//        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+//        return ResponseEntity.ok(Map.of("message", "Logged out"));
+//    }
+
 
     public String generateTokenFromUsername(String username) {
         return Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
-                .signWith(getSigningKey())
+                .subject(username)
+                .issuedAt(new Date())
+                .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .signWith(key())
                 .compact();
     }
 
     public String getUserNameFromJwtToken(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+        return Jwts.parser()
+                .verifyWith((SecretKey) key())
+                .build().parseSignedClaims(token)
+                .getPayload().getSubject();
+    }
+
+    private Key key() {
+        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
     }
 
     public boolean validateJwtToken(String authToken) {
         try {
-            Jwts.parserBuilder()
-                .setSigningKey(getSigningKey())
-                .build()
-                .parseClaimsJws(authToken);
+            System.out.println("Validate");
+            Jwts.parser().verifyWith((SecretKey) key()).build().parseSignedClaims(authToken);
             return true;
         } catch (MalformedJwtException e) {
             logger.error("Invalid JWT token: {}", e.getMessage());
@@ -94,9 +123,5 @@ public class JwtUtils {
             logger.error("JWT claims string is empty: {}", e.getMessage());
         }
         return false;
-    }
-
-    private Key getSigningKey() {
-        return Keys.hmacShaKeyFor(io.jsonwebtoken.io.Decoders.BASE64.decode(jwtSecret));
     }
 }
