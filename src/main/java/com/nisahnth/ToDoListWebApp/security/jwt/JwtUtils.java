@@ -68,18 +68,25 @@ public class JwtUtils {
 //            .sameSite("Strict")
 //            .build();
 
+boolean isProd = false;
     public ResponseCookie getCleanJwtCookie() {
         ResponseCookie cookie = ResponseCookie.from(jwtCookie, null)
                 // .path("/")
                 // .maxAge(0) // delete cookie
                 // .httpOnly(true)
                 // .build();
-                  .path("/")
-        .maxAge(0)
-        .httpOnly(true)
-        .secure(true)
-        .sameSite("None")
-        .build();
+        //           .path("/")
+        // .maxAge(0)
+        // .httpOnly(true)
+        // .secure(true)
+        // .sameSite("None")
+        // .build();
+         .path("/")
+    .maxAge(24 * 60 * 60)
+    .httpOnly(true)
+    .secure(isProd)        // false in dev for HTTP, true in prod for HTTPS
+    .sameSite(isProd ? "None" : "Lax")
+    .build();
         return cookie;
     }
 
