@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-            .allowedOrigins("http://localhost:5173") // replace with your actual frontend URL
+            .allowedOrigins("https://todo-react-app-psi-gold.vercel.app/login") // replace with your actual frontend URL
             .allowedMethods("*")
             .allowedHeaders("*")
             .allowCredentials(true)

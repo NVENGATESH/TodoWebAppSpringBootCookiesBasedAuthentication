@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@CrossOrigin("http://localhost:5173")
+@CrossOrigin("https://todo-react-app-psi-gold.vercel.app")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
