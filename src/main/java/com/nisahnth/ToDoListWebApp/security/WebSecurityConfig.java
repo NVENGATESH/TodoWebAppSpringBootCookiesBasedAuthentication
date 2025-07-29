@@ -91,7 +91,7 @@ public class WebSecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of(
                 "http://localhost:5173",
-                "https://todo-react-app-git-main-nvengateshs-projects.vercel.app"
+                "https://vercel.com/nvengateshs-projects/todo-react-app"
         ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));

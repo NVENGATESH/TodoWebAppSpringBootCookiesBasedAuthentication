@@ -29,8 +29,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "https://todo-react-app-git-main-nvengateshs-projects.vercel.app", allowCredentials = "true")
-
+@CrossOrigin(
+        origins = {
+                "https://todo-react-app-git-main-nvengateshs-projects.vercel.app",
+                "http://localhost:5173"
+        },
+        allowCredentials = "true"
+)
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
