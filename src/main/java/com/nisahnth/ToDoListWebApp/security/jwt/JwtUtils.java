@@ -31,7 +31,7 @@ public class JwtUtils {
     @Value("${spring.app.jwtCookieName}")
     private String jwtCookie;
 
-    private boolean isProd = true; // set this according to your environment
+    private boolean isProd = true;
 
     public String getJwtFromCookies(HttpServletRequest request) {
         Cookie cookie = WebUtils.getCookie(request, jwtCookie);
@@ -44,7 +44,7 @@ public class JwtUtils {
                 .path("/")
                 .maxAge(24 * 60 * 60)
                 .httpOnly(true)
-                .secure(isProd) // true for prod (HTTPS), false for dev
+                .secure(isProd)
                 .sameSite(isProd ? "None" : "Lax")
                 .build();
     }
@@ -52,7 +52,7 @@ public class JwtUtils {
     public ResponseCookie getCleanJwtCookie() {
         return ResponseCookie.from(jwtCookie, "")
                 .path("/")
-                .maxAge(0) // delete cookie immediately
+                .maxAge(0)
                 .httpOnly(true)
                 .secure(isProd)
                 .sameSite(isProd ? "None" : "Lax")
