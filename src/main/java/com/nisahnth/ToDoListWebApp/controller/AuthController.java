@@ -29,8 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "https://nishanthtodoapp.onrender.com", allowCredentials = "true")
-
+@CrossOrigin("http://localhost:5173")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
