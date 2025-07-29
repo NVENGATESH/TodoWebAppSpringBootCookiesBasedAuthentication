@@ -45,11 +45,17 @@ public class JwtUtils {
     public ResponseCookie generateJwtCookie(UserDetailsImpl userPrincipal) {
         String jwt = generateTokenFromUsername(userPrincipal.getUsername());
         ResponseCookie cookie = ResponseCookie.from(jwtCookie, jwt)
-                .path("/api")
-                .maxAge(24 * 60 * 60)
-                .httpOnly(true)//browser to server send pannum true kudurha
-                .secure(true)
-                .build();
+                // .path("/api")
+                // .maxAge(24 * 60 * 60)
+                // .httpOnly(true)//browser to server send pannum true kudurha
+                // .secure(true)
+                // .build();
+                  .path("/") // ✅ allow entire site
+        .maxAge(24 * 60 * 60)
+        .httpOnly(true)
+        .secure(true) // ❗ must be true on HTTPS like Render
+        .sameSite("None") // ✅ allow cross-site cookie from frontend
+        .build();
         return cookie;
     }
 
@@ -64,10 +70,16 @@ public class JwtUtils {
 
     public ResponseCookie getCleanJwtCookie() {
         ResponseCookie cookie = ResponseCookie.from(jwtCookie, null)
-                .path("/api")
-                .maxAge(0) // delete cookie
-                .httpOnly(true)
-                .build();
+                // .path("/")
+                // .maxAge(0) // delete cookie
+                // .httpOnly(true)
+                // .build();
+                  .path("/")
+        .maxAge(0)
+        .httpOnly(true)
+        .secure(true)
+        .sameSite("None")
+        .build();
         return cookie;
     }
 
