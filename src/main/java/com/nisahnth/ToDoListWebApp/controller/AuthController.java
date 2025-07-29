@@ -29,7 +29,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@CrossOrigin("http://localhost:5174")
+@CrossOrigin(origins = "https://your-frontend-domain.com", allowCredentials = "true")
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {

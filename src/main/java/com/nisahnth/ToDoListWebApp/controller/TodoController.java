@@ -23,7 +23,8 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.List;
 
-@CrossOrigin("http://localhost:5173")
+@CrossOrigin(origins = "https://your-frontend-domain.com", allowCredentials = "true")
+
 @RestController
 @RequestMapping("/api")
 public class TodoController {
