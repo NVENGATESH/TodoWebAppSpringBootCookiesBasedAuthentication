@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.List;
 
-@CrossOrigin(origins = "https://your-frontend-domain.com", allowCredentials = "true")
+@CrossOrigin(origins = "https://nishanthtodoapp.onrender.com", allowCredentials = "true")
 
 @RestController
 @RequestMapping("/api")
