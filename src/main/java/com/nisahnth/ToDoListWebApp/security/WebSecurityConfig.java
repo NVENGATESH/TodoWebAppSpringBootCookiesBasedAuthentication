@@ -1,5 +1,5 @@
 package com.nisahnth.ToDoListWebApp.security;
-
+import java.util.*;
 import com.nisahnth.ToDoListWebApp.model.AppRole;
 import com.nisahnth.ToDoListWebApp.model.Role;
 import com.nisahnth.ToDoListWebApp.model.User;
@@ -134,19 +134,32 @@ public class WebSecurityConfig {
         };
     }
 
+  
+
+
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
-        config.addAllowedOrigin("https://todo-react-app-two-pearl.vercel.app/");
-        config.addAllowedMethod("*");
-        config.addAllowedHeader("*");
         config.setAllowCredentials(true);
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/api/**", config);
+        // ✅ Add your frontend domain here
+        config.setAllowedOrigins(Arrays.asList("https://todo-react-app-two-pearl.vercel.app"));
 
+        config.setAllowedHeaders(Arrays.asList(
+            "Origin", "Content-Type", "Accept", "Authorization", "X-Requested-With"
+        ));
+
+        config.setAllowedMethods(Arrays.asList(
+            "GET", "POST", "PUT", "DELETE", "OPTIONS"
+        ));
+
+        config.setExposedHeaders(Arrays.asList("Authorization"));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
+
 
     @Bean
     public CommandLineRunner initData(RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
@@ -166,5 +179,7 @@ public class WebSecurityConfig {
 
             // You can re-enable user creation here if needed
         };
+ 
+    
     }
 }
