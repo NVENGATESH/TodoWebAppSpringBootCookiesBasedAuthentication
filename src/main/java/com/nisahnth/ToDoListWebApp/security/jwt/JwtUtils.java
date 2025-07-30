@@ -49,6 +49,8 @@ public class JwtUtils {
                 .maxAge(24 * 60 * 60)
                 .httpOnly(true)//browser to server send pannum true kudurha
                 .secure(true)
+                  .sameSite("None")
+
                 .build();
         return cookie;
     }
@@ -67,6 +69,9 @@ public class JwtUtils {
                 .path("/api")
                 .maxAge(0) // delete cookie
                 .httpOnly(true)
+                .sameSite("None")
+.secure(true)
+
                 .build();
         return cookie;
     }
@@ -122,3 +127,13 @@ public class JwtUtils {
         return false;
     }
 }
+
+
+
+
+// authenticationManager.authenticate(
+//   new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+// authenticationManager.authenticate(
+//   new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+// User user = userRepository.findByUsername(username)
+//         .orElseThrow(() -> new UsernameNotFoundException("User Not Found"));

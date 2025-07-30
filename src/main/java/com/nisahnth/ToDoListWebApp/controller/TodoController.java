@@ -25,11 +25,13 @@ import java.util.List;
 
 @CrossOrigin(
     origins = {
-        "https://todo-react-app-two-pearl.vercel.app/",
+        "https://todo-react-app-two-pearl.vercel.app",
+        "https://todo-react-app-git-main-nvengateshs-projects.vercel.app",
         "http://localhost:5173"
     },
     allowCredentials = "true"
 )
+
 
 @RestController
 @RequestMapping("/api")
