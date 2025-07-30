@@ -1,22 +1,12 @@
-
 package com.nisahnth.ToDoListWebApp.controller;
 
 
-import com.nisahnth.ToDoListWebApp.security.services.UserDetailsServiceImpl;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
-
+import com.nisahnth.ToDoListWebApp.model.AppRole;
+import com.nisahnth.ToDoListWebApp.model.Role;
+import com.nisahnth.ToDoListWebApp.model.User;
+import com.nisahnth.ToDoListWebApp.repositories.RoleRepository;
+import com.nisahnth.ToDoListWebApp.repositories.UserRepository;
+import com.nisahnth.ToDoListWebApp.security.jwt.JwtUtils;
 import com.nisahnth.ToDoListWebApp.security.request.LoginRequest;
 import com.nisahnth.ToDoListWebApp.security.request.SignupRequest;
 import com.nisahnth.ToDoListWebApp.security.response.MessageResponse;
@@ -39,14 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@CrossOrigin(
-    origins = {
-        "https://todo-react-app-two-pearl.vercel.app/",
-        "http://localhost:5173"
-    },
-    allowCredentials = "true"
-)
-
+@CrossOrigin("http://localhost:5174")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
