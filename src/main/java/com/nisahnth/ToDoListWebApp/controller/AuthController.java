@@ -1,4 +1,4 @@
-package com.nisahnth.ToDoListWebApp.security.jwt;
+
 package com.nisahnth.ToDoListWebApp.controller;
 
 
@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
 
 @CrossOrigin(
     origins = {
-        "https://todo-react-app-git-main-nvengateshs-projects.vercel.app",
+        "https://todo-react-app-two-pearl.vercel.app/",
         "http://localhost:5173"
     },
     allowCredentials = "true"
